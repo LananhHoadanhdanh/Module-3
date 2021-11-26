@@ -1,0 +1,101 @@
+use bai_tap_nho_34;
+DELIMITER $$
+CREATE PROCEDURE GetCuocPhi(
+    IN soLuongVT INT,
+    IN trongTaiQD int,
+    IN donGia int,
+    OUT cuocPhi double
+)
+BEGIN
+    if soLuongVT > trongTaiQD then set cuocPhi = soLuongVT * donGia * 1.05;
+    else set cuocPhi =  soLuongVT * donGia;
+    end if;
+END $$
+DELIMITER ;
+
+SET @cuocPhi := 100;
+call GetCuocPhi(90, 80, 2000, @cuocPhi);
+select @cuocPhi;
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+DELIMITER //
+CREATE FUNCTION get_cuoc_phi(soLuongVT INT,trongTaiQD int, donGia int) RETURNS int DETERMINISTIC
+BEGIN
+    if soLuongVT > trongTaiQD then return soLuongVT * donGia * 1.05;
+    else return soLuongVT * donGia;
+    end if;
+END //
+DELIMITER ;
+select get_cuoc_phi(50, 30, 1000);
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+DELIMITER //
+drop function if exists get_thuong;
+CREATE FUNCTION get_thuong(thoiGianVT INT, thoiGianQD int, cuocPhi double) RETURNS int DETERMINISTIC
+BEGIN
+    if thoiGianVT < thoiGianQD then return cuocPhi * 0.05;
+    else return 0;
+    end if;
+END //
+DELIMITER ;
+select get_thuong(3, 4, 150000);
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+DELIMITER //
+drop function if exists tinh_ngay;
+CREATE FUNCTION tinh_ngay(ngayDi datetime, ngayDen datetime) RETURNS int DETERMINISTIC
+BEGIN
+    if ngayDi = ngayDen then return 1;
+    else return datediff(ngayDen, ngayDi);
+    end if;
+END //
+DELIMITER ;
+select tinh_ngay('2021/11/21', '2021/11/22');
+#_______________________________________________________________________________________________________________________
+use demo20062;
+delimiter $$
+drop procedure if exists tinhTien;
+create procedure tinhTien(in id int, out sum int, out name varchar(50))
+begin
+    select price * quantity into sum
+    from product
+    where id = product.id;
+    select product.name into name
+    from product
+    where id = product.id;
+end $$
+delimiter ;
+
+call tinhTien(1, @sum, @name);
+select @sum, @name;
+#_______________________________________________________________________________________________________________________
+delimiter //
+drop procedure if exists dat_re;
+create procedure dat_re(in id int, out result varchar(50))
+begin
+    declare price int;
+    select product.price into price
+    from product
+    where id = product.id;
+    if price > 200 then set result = 'Đắt';
+    else set result = 'Rẻ';
+    end if;
+end //
+delimiter ;
+
+call dat_re(2, @result);
+select @result;
+#_______________________________________________________________________________________________________________________
+delimiter //
+drop procedure if exists tinh_tong;
+create procedure tinh_tong(in a int, in b int, out tong_ab int)
+begin
+    set tong_ab = a + b;
+end //
+delimiter ;
+
+call tinh_tong(5, 3, @tong_ab);
+select @tong_ab;
+#_______________________________________________________________________________________________________________________
+
+

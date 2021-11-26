@@ -1,0 +1,12 @@
+select * from subject
+where Credit >= all (select Credit from subject);
+
+select subject.SubID,SubName,Credit,mark, Status from subject
+    join mark m on subject.SubID = m.SubID
+where Mark >= all (select Mark from mark);
+
+select student.StudentID, StudentName, Address, phoneNum, Status, ClassID, AVG(Mark) as 'average score'
+from student
+    left join mark on student.StudentID = mark.StudentID
+group by student.StudentID
+order by `average score`;

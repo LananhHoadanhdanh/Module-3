@@ -1,0 +1,52 @@
+use bai_tap_nho_34;
+drop view if exists tinh_cuoc_phi;
+create view tinh_cuoc_phi as
+(select SoXe, TenLoTrinh, SoLuongVT, trong_tai.TrongTaiQD, NgayDi, NgayDen,
+        tinh_ngay(NgayDi,NgayDen) as ThoiGianVT, ThoiGianQD,
+        get_cuoc_phi(SoLuongVT, TrongTaiQD, DonGia) as `cuoc_phi`
+from chi_tiet_van_tai
+join lo_trinh on chi_tiet_van_tai.MaLoTrinh = lo_trinh.MaLoTrinh
+join trong_tai on chi_tiet_van_tai.MaTrongTai = trong_tai.MaTrongTai);
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+drop view if exists bang_cuoc_phi;
+create view bang_cuoc_phi as
+select SoXe, TenLoTrinh, SoLuongVT, NgayDi, NgayDen, ThoiGianVT, cuoc_phi,
+       get_thuong(ThoiGianVT, ThoiGianQD, cuoc_phi) as Thuong
+from tinh_cuoc_phi;
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+drop view if exists xe_vuot_trong_tai;
+create view xe_vuot_trong_tai as
+select SoXe, TenLoTrinh, SoLuongVT, TrongTaiQD, NgayDi, NgayDen
+from tinh_cuoc_phi
+where SoLuongVT > TrongTaiQD;
+#_______________________________________________________________________________________________________________________
+use bai_tap_nho_34;
+DELIMITER //
+drop procedure if exists procudure_chiTietVanTai;
+CREATE procedure procudure_chiTietVanTai( in maVT int, out soXe varchar(15), out maTrongtai int, out soLuongVt int, out ngayDi datetime, out ngayDen datetime)
+BEGIN
+    select chi_tiet_van_tai.SoXe into soXe
+    from chi_tiet_van_tai
+    where maVT = chi_tiet_van_tai.MaVT;
+    select chi_tiet_van_tai.MaTrongTai into maTrongtai
+    from chi_tiet_van_tai
+    where maVT = chi_tiet_van_tai.MaVT;
+    select chi_tiet_van_tai.SoLuongVT into soLuongVt
+    from chi_tiet_van_tai
+    where maVT = chi_tiet_van_tai.MaVT;
+    select chi_tiet_van_tai.NgayDi into ngayDi
+    from chi_tiet_van_tai
+    where maVT = chi_tiet_van_tai.MaVT;
+    select chi_tiet_van_tai.NgayDen into ngayDen
+    from chi_tiet_van_tai
+    where maVT = chi_tiet_van_tai.MaVT;
+END //
+DELIMITER ;
+
+call procudure_chiTietVanTai(2, @soXe, @maTrongtai, @soLuongVt, @ngayDi, @ngayDen);
+select @soXe, @maTrongtai, @soLuongVt, @ngayDi, @ngayDen;
+
+
+

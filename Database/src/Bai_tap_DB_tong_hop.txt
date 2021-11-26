@@ -1,0 +1,268 @@
+create view hoa_don as
+select `order`.id, time, sum(product.price * orderdetail.quantity) as `TotalPrice`,customerId, customer.name as `Ten khach hang`
+from `order`, product, orderdetail, customer
+where (`order`.id = orderdetail.orderId and product.id = orderdetail.productId and customerId = customer.id)
+group by orderId;
+
+# 6. In ra các số hóa đơn, trị giá hóa đơn bán ra trong ngày 19/6/2006 và ngày 20/6/2006.
+select hoa_don.id, hoa_don.TotalPrice
+from hoa_don
+         join `order` on hoa_don.id = `order`.id
+where hoa_don.time = '2006/06/19' or hoa_don.time = '2006/06/20';
+
+# 7. In ra các số hóa đơn, trị giá hóa đơn trong tháng 6/2007, sắp xếp theo ngày (tăng dần) và trị giá của hóa đơn (giảm dần).
+select hoa_don.id, hoa_don.TotalPrice
+from hoa_don
+         join `order` on hoa_don.id = `order`.id
+where (year(hoa_don.time) = 2006 and month(hoa_don.time) = 10)
+order by TotalPrice desc ;
+
+# 8. In ra danh sách các khách hàng (MAKH, HOTEN) đã mua hàng trong ngày 19/06/2007.
+select customer.id, name
+from customer, `order`
+where customer.id = `order`.customerId and time = '2021/06/19'
+group by customer.id;
+
+# 10. In ra danh sách các sản phẩm (MASP,TENSP) được khách hàng có tên “Nguyen Van A” mua trong tháng 10/2006.
+select orderdetail.orderId, product.name
+from orderdetail
+         join product on orderdetail.productId = product.id
+         join `order` on `order`.id = orderdetail.orderId
+         join customer on customer.id = `order`.customerId
+where year(time) = 2006 and month(time) = 10 and customer.name like 'Nguyen Van A'
+order by orderId;
+
+# 11. Tìm các số hóa đơn đã mua sản phẩm “Máy giặt” hoặc “Tủ lạnh”.
+select orderId
+from orderdetail
+         join product on product.id = orderdetail.productId
+where name like 'Máy giặt' or name like 'Tủ lạnh'
+group by orderId
+order by orderId;
+
+# 12. Tìm các số hóa đơn đã mua sản phẩm “Máy giặt” hoặc “Tủ lạnh”, mỗi sản phẩm mua với số lượng từ 10 đến 20.
+create view cau12_13 as
+select orderId, product.name, orderdetail.quantity
+from orderdetail
+         join product on product.id = orderdetail.productId
+where (name like 'Máy giặt' or name like 'Tủ lạnh')
+  and (orderdetail.quantity >= 10 and orderdetail.quantity <= 20)
+order by orderId;
+
+select orderId from cau12_13
+group by orderId;
+
+# 13. Tìm các số hóa đơn mua cùng lúc 2 sản phẩm “Máy giặt” và “Tủ lạnh”, mỗi sản phẩm mua với số lượng từ 10 đến 20.
+select orderId from cau12_13
+group by orderId
+having count(orderId) >= 2;
+
+# 15. In ra danh sách các sản phẩm (MASP,TENSP) không bán được.
+select product.id, product.name
+from product
+where product.id not in (select productId from orderdetail);
+
+# 16. In ra danh sách các sản phẩm (MASP,TENSP) không bán được trong năm 2006.
+create view cau_16 as
+select orderId, productId, product.name, time
+from orderdetail
+         join `order` on `order`.id = orderdetail.orderId
+         join product on product.id = orderdetail.productId
+where year(time) = 2006;
+
+select product.id, product.name
+from product
+where id not in (select productId from cau_16);
+
+# 17. In ra danh sách các sản phẩm (MASP,TENSP) có giá >300 sản xuất bán được trong năm 2006.
+select cau_16.productId, cau_16.name, product.price
+from cau_16
+         join product on cau_16.productId = product.id
+where price > 300
+group by productId;
+
+# 18. Tìm số hóa đơn đã mua tất cả các sản phẩm có giá < 200.
+create view san_pham_nho_hon_200 as
+select product.id, price from product
+where price < 200;
+
+select orderId
+from orderdetail
+where productId in (select id from san_pham_nho_hon_200)
+group by orderId
+having count(orderId) = (select count(id) from san_pham_nho_hon_200);
+
+# 19. Tìm số hóa đơn trong năm 2006 đã mua tất cả các sản phẩm có giá < 200.
+select orderId
+from orderdetail
+         join `order` on `order`.id = orderdetail.orderId
+where (productId in (select id from san_pham_nho_hon_200)) and year(time) = 2006
+group by orderId
+having count(orderId) = (select count(id) from san_pham_nho_hon_200);
+
+# 21. Có bao nhiêu sản phẩm khác nhau được bán ra trong năm 2006.
+create view cau_21 as
+select productId
+from cau_16
+group by productId;
+
+select count(productId)
+from cau_21;
+
+# 22. Cho biết trị giá hóa đơn cao nhất, thấp nhất là bao nhiêu?
+select max(TotalPrice), min(TotalPrice)
+from hoa_don;
+
+# 23. Trị giá trung bình của tất cả các hóa đơn được bán ra trong năm 2006 là bao nhiêu?
+select avg(TotalPrice) as `Trung binh hoa don 2006`
+from hoa_don
+where year(time) = 2006;
+
+# 24. Tính doanh thu bán hàng trong năm 2006.
+select sum(TotalPrice) as `Doanh thu 2006`
+from hoa_don
+where year(time) = 2006;
+
+# 25. Tìm số hóa đơn có trị giá cao nhất trong năm 2006.
+select max(TotalPrice) as `Max 2006`
+from hoa_don
+where year(time) = 2006;
+
+# 26. Tìm họ tên khách hàng đã mua hóa đơn có trị giá cao nhất trong năm 2006.
+select `Ten khach hang`
+from hoa_don
+where TotalPrice >= all (select TotalPrice from hoa_don);
+
+# Tìm tên khách hàng, số lượng hóa đơn mà mỗi khách hàng đã mua
+select customer.name as `customerName`, count(`order`.id)
+from customer
+         left join `order` on customer.id = `order`.customerId
+group by customer.id;
+
+# In ra orderId, tổng số lượng sản phẩm của mỗi hóa đơn
+select orderId, sum(quantity)
+from orderdetail
+group by orderId;
+
+# Id khách hàng chưa mua gì
+select customer.id, customer.name
+from customer
+where customer.id not in (select customerId from `order`);
+
+# 27. In ra danh sách 3 khách hàng (MAKH, HOTEN) mua nhiều hàng nhất (tính theo số lượng).
+select customerId, customer.name, sum(quantity)
+from orderdetail
+         join `order` on `order`.id = orderdetail.orderId
+         join customer on customer.id = `order`.customerId
+group by customerId
+order by sum(quantity) desc
+limit 3;
+
+# 28. In ra danh sách các sản phẩm (MASP, TENSP) có giá bán bằng 1 trong 3 mức giá cao nhất.
+create view `3 muc gia cao nhat` as
+select price
+from product
+group by price
+order by price desc
+limit 3;
+
+select product.id, product.name
+from product
+where price in (select price from `3 muc gia cao nhat`);
+
+# 29. In ra danh sách các sản phẩm (MASP, TENSP) có tên bắt đầu bằng chữ M, có giá bằng 1 trong 3 mức giá cao nhất (của tất cả các sản phẩm).
+select product.id, product.name
+from product
+where (price in (select price from `3 muc gia cao nhat`)) and product.name like 'm%';
+
+# 32. Tính tổng số sản phẩm giá <300.
+select sum(product.quantity) as `San pham gia < 300`
+from product
+where price < 200;
+
+# 33. Tính tổng số sản phẩm theo từng giá.
+select product.price, sum(product.quantity) as `So san pham`
+from product
+group by product.price;
+
+# 34. Tìm giá bán cao nhất, thấp nhất, trung bình của các sản phẩm bắt đầu bằng chữ M.
+select max(price), min(price), avg(price)
+from product
+where name like 'm%';
+
+# 35. Tính doanh thu bán hàng mỗi ngày.
+select time, sum(TotalPrice)
+from hoa_don
+group by time;
+
+# 36. Tính tổng số lượng của từng sản phẩm bán ra trong tháng 10/2006.
+select productId, sum(quantity)
+from orderdetail
+group by productId;
+
+# 37. Tính doanh thu bán hàng của từng tháng trong năm 2006.
+create view `doanh thu 2006` as
+select month(time) as `month`, sum(TotalPrice) as `sumtTotalPrice`
+from hoa_don
+where year(time) = 2006
+group by month(time);
+
+# 38. Tìm hóa đơn có mua ít nhất 4 sản phẩm khác nhau.
+select orderId
+from orderdetail
+group by orderId
+having count(orderId) >= 4;
+
+# 39. Tìm hóa đơn có mua 3 sản phẩm có giá <300 (3 sản phẩm khác nhau).
+create view `san pham gia < 300` as
+select name, id, price
+from product
+where price < 300;
+
+select orderId
+from orderdetail
+where productId in (select id from `san pham gia < 300`)
+group by orderId
+having count(orderId) = 3;
+
+# 40. Tìm khách hàng (MAKH, HOTEN) có số lần mua hàng nhiều nhất.
+create view `so lan mua hang cua khach` as
+select customerId, name, count(customerId) as `so lan mua`
+from `order`
+         join customer on customer.id = `order`.customerId
+group by customerId;
+
+select customerId, name
+from `so lan mua hang cua khach`
+where `so lan mua` >= all (select `so lan mua` from `so lan mua hang cua khach`);
+
+# 41. Tháng mấy trong năm 2006, doanh số bán hàng cao nhất?
+select month
+from `doanh thu 2006`
+where sumtTotalPrice >= all (select sumtTotalPrice from `doanh thu 2006`);
+
+# 42. Tìm sản phẩm (MASP, TENSP) có tổng số lượng bán ra thấp nhất trong năm 2006.
+create view `so luong ban ra 2006` as
+select productId, sum(quantity) as `sumQTY`
+from orderdetail
+         join `order` on `order`.id = orderdetail.orderId
+where year(time) = 2006
+group by productId;
+
+select productId, product.name
+from `so luong ban ra 2006`
+         join product on productId = product.id
+where sumQTY <= all (select sumQTY from `so luong ban ra 2006`);
+
+# 45. Trong 3 khách hàng có doanh số cao nhất, tìm khách hàng có số lần mua hàng nhiều nhất.
+create view `cau 45` as
+select hoa_don.customerId, `Ten khach hang`, sum(TotalPrice) as `Tong doanh so`, `so lan mua`
+from hoa_don
+         join `so lan mua hang cua khach` on hoa_don.customerId = `so lan mua hang cua khach`.customerId
+group by customerId
+order by `Tong doanh so` desc
+limit 3;
+
+select customerId, `Ten khach hang`
+from `cau 45`
+where `so lan mua` >= all (select `so lan mua` from `cau 45`)

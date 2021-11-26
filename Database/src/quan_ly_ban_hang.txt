@@ -1,0 +1,23 @@
+select orderId,orderDate,orderTotalPrice
+from `order`;
+
+select customerName,customerAge,productName,productPrice
+from customer C join `order` o on C.customerId = o.customerId
+    join orderdetail o1
+    join orderdetail o2 on o.orderId = o2.orderId
+    join product p on p.productId = O1.productId
+order by customerName;
+
+select customerName
+from customer
+where customerId not in (select `order`.customerId from `order`);
+
+select `order`.orderId, orderDate, sum(product.productPrice*orderdetail.orderQTY) as `Total`
+from `order`, orderdetail, product
+where `order`.orderId = orderdetail.orderId and product.productId = orderdetail.productId
+group by orderDate, `order`.orderId;
+
+# alter table `tên_bảng` change `tên_cột_cũ` `tên_cột_mới` kiểu_dữ_liệu ràng_buộc
+
+alter table student_management.student
+add foreign key (classId) references class(classId)

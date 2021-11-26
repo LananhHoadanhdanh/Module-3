@@ -1,0 +1,32 @@
+Đổi tên bảng:
+alter table `tên_bảng` change `tên_cột_cũ` `tên_cột_mới` kiểu_dữ_liệu ràng_buộc
+
+Thêm ràng buộc khóa chính
+Alter table Tên_Bảng
+add constraint Tên_khóa_chính
+PRIMARY KEY (Danh sách các thuộc tính của khóa chính)
+
+Xóa ràng buộc khóa chính
+
+
+Xóa ràng buộc khóa phụ
+ALTER TABLE `Tên_bảng`
+DROP CONSTRAINT `Tên_khóa_phụ`;
+alter table student_management.student
+drop constraint student_ibfk_1;
+
+Thêm ràng buộc khóa phụ
+alter table student_management.student
+add foreign key (classId) references class(classId)
+
+Thêm cột
+ALTER TABLE tên_bảng
+ADD tên_cột loại_dữ liệu;
+
+Xóa cột
+ALTER TABLE tên_bảng
+DROP TABLE tên_cột;
+
+Thay đổi dữ liệu
+ALTER TABLE tên_bảng
+ALTER COLUMN tên_cột loại_dữ _liệu;
