@@ -18,14 +18,14 @@
 <%--    <input type="submit" id="submit" value="Calculate Discount">--%>
 <%--  </form>--%>
 
-<%--<form method="post" action="/login">--%>
-<%--  <div class="login">--%>
-<%--    <h2>Login</h2>--%>
-<%--    <input type="text" name="username" size="30"  placeholder="username"/> <br>--%>
-<%--    <input type="password" name="password" size="30" placeholder="password" /> <br>--%>
-<%--    <input type="submit" value="Sign in"/>--%>
-<%--  </div>--%>
-<%--</form>--%>
+<form method="get" action="/login">
+  <div class="login">
+    <h2>Login</h2>
+    <input type="text" name="username" size="30"  placeholder="username"/> <br>
+    <input type="password" name="password" size="30" placeholder="password" /> <br>
+    <input type="submit" value="Sign in"/>
+  </div>
+</form>
 
 <%--<h2>Currency Converter</h2>--%>
 <%--<form action="/convert" method="post">--%>
@@ -36,10 +36,10 @@
 <%--  <input type = "submit" id = "submit" value = "Converter"/>--%>
 <%--</form>--%>
 
-<h2>Vietnamese Dictionary</h2>
-<form action="/translate" method="post">
-  <input type="text" name="txtSearch" placeholder="Enter your word: "/>
-  <input type = "submit" id = "submit" value = "Search"/>
-</form>
+<%--<h2>Vietnamese Dictionary</h2>--%>
+<%--<form action="/translate" method="post">--%>
+<%--  <input type="text" name="txtSearch" placeholder="Enter your word: "/>--%>
+<%--  <input type = "submit" id = "submit" value = "Search"/>--%>
+<%--</form>--%>
   </body>
 </html>
