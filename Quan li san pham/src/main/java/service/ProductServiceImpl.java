@@ -64,6 +64,17 @@ public class ProductServiceImpl implements ProductService<Product> {
     }
 
     @Override
+    public ArrayList<Product> findByPrice(double minPrice, double maxPrice) {
+        ArrayList<Product> listByPrice = new ArrayList<>();
+        for (int i = 0; i < products.size(); i++) {
+            if ((products.get(i).getPrice() <= maxPrice) && (products.get(i).getPrice() >= minPrice)) {
+                listByPrice.add(products.get(i));
+            }
+        }
+        return listByPrice;
+    }
+
+    @Override
     public void update(int id, Product product) {
         products.set(findIndexById(id), product);
     }

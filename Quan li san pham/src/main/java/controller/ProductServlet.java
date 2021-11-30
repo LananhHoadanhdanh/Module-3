@@ -32,6 +32,9 @@ public class ProductServlet extends HttpServlet {
             case "findByName":
                 showFindByNameForm(request, response);
                 break;
+            case "findByPrice":
+                showFindByPriceForm(request, response);
+                break;
             case "view":
                 showProductInformation(request, response);
                 break;
@@ -39,6 +42,11 @@ public class ProductServlet extends HttpServlet {
                 showListProduct(request, response);
                 break;
         }
+    }
+
+    private void showFindByPriceForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("product/findByPrice.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void showProductInformation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -100,13 +108,25 @@ public class ProductServlet extends HttpServlet {
                 deleteProduct(request, response);
                 break;
             case "findByName":
-                FindProductByName(request, response);
+                findProductByName(request, response);
+                break;
+            case "findByPrice":
+                findProductByPrice(request, response);
                 break;
             default:
         }
     }
 
-    private void FindProductByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void findProductByPrice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("product/listByPrice.jsp");
+        double minPrice = Double.parseDouble(request.getParameter("minPrice"));
+        double maxPrice = Double.parseDouble(request.getParameter("maxPrice"));
+        ArrayList<Product> listByPrice = productService.findByPrice(minPrice, maxPrice);
+        request.setAttribute("danhSachTheoGia", listByPrice);
+        dispatcher.forward(request, response);
+    }
+
+    private void findProductByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         ArrayList<Product> listByName = productService.findByName(name);
         RequestDispatcher dispatcher = request.getRequestDispatcher("product/listByName.jsp");

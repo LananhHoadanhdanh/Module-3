@@ -11,6 +11,7 @@ public interface ProductService<T> {
     int findIndexById(int id);
     T findById(int id);
     ArrayList<T> findByName(String name);
+    ArrayList<T> findByPrice(double minPrice, double maxPrice);
     void update(int id, T t);
     void remove(int id);
 }

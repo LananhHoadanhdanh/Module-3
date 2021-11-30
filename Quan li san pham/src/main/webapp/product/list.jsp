@@ -15,6 +15,7 @@
 <h1>Product List</h1>
 <p><a href="/products?action=create">Create a product</a></p>
 <p><a href="/products?action=findByName">Find product by Name</a></p>
+<p><a href="/products?action=findByPrice">Find product by Price</a></p>
 <table border="1px" style="border-collapse: collapse">
     <tr>
         <td>Id</td>
