@@ -21,7 +21,7 @@
             </tr>
             <tr>
                 <td>Price:</td>
-                <td><input type="text" name="price" id="price" value="${sanPhamSua.price}"></td>
+                <td><input type="number" name="price" id="price" value="${sanPhamSua.price}"></td>
             </tr>
             <tr>
                 <td></td>

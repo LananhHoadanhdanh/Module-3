@@ -17,11 +17,11 @@
         <table>
             <tr>
                 <td>Min Price: </td>
-                <td><input type="text" name="minPrice" id="minPrice"></td>
+                <td><input type="number" name="minPrice" id="minPrice"></td>
             </tr>
             <tr>
                 <td>Max Price: </td>
-                <td><input type="text" name="maxPrice" id="maxPrice"></td>
+                <td><input type="number" name="maxPrice" id="maxPrice"></td>
             </tr>
             <tr>
                 <td></td>
