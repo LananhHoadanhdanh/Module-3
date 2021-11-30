@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService<Product> {
     public ArrayList<Product> findByName(String name) {
         ArrayList<Product> listByName = new ArrayList<>();
         for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getName().equals(name)) {
+            if (products.get(i).getName().matches(name+".*")) {
                 listByName.add(products.get(i));
             }
         }

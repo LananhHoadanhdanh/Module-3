@@ -22,14 +22,16 @@
         <td>Price</td>
         <td>Edit</td>
         <td>Delete</td>
+        <td>View</td>
     </tr>
     <c:forEach items='${danhSach}' var="product">
         <tr>
-        <td>${product.id}</td>
-        <td>${product.name}</td>
-        <td>${product.price}</td>
-        <td><a href="/products?action=edit&id=${product.id}">Edit</a></td>
-        <td><a href="/products?action=delete&id=${product.id}">Delete</a></td>
+            <td>${product.id}</td>
+            <td>${product.name}</td>
+            <td>${product.price}</td>
+            <td><a href="/products?action=edit&id=${product.id}">Edit</a></td>
+            <td><a href="/products?action=delete&id=${product.id}">Delete</a></td>
+            <td><a href="/products?action=view&id=${product.id}">View</a></td>
         </tr>
     </c:forEach>
 </table>

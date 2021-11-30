@@ -11,6 +11,21 @@
     <title>Title</title>
 </head>
 <body>
-
+<p><a href="/products">Back to Product List</a></p>
+<fieldset style="width: 300px">
+    <legend>Product's Information</legend>
+    <table>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Price</td>
+        </tr>
+        <tr>
+            <td>${productView.id}</td>
+            <td>${productView.name}</td>
+            <td>${productView.price}</td>
+        </tr>
+    </table>
+</fieldset>
 </body>
 </html>

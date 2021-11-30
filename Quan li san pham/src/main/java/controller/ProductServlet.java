@@ -32,10 +32,21 @@ public class ProductServlet extends HttpServlet {
             case "findByName":
                 showFindByNameForm(request, response);
                 break;
+            case "view":
+                showProductInformation(request, response);
+                break;
             default:
                 showListProduct(request, response);
                 break;
         }
+    }
+
+    private void showProductInformation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("product/view.jsp");
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = productService.findById(id);
+        request.setAttribute("productView", product);
+        dispatcher.forward(request, response);
 
     }
 
@@ -125,6 +136,4 @@ public class ProductServlet extends HttpServlet {
         productService.add(new Product(name, price));
         response.sendRedirect("/products");
     }
-
-
 }
