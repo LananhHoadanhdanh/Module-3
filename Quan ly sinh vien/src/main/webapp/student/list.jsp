@@ -27,9 +27,9 @@
         <tr>
             <td>${student.id}</td>
             <td>${student.name}</td>
-            <td>${student.mathScore}</td>
-            <td>${student.physicalScore}</td>
-            <td>${student.chemistryScore}</td>
+            <td style="text-align: center">${student.mathScore}</td>
+            <td style="text-align: center">${student.physicalScore}</td>
+            <td style="text-align: center">${student.chemistryScore}</td>
             <td><a href="/students?action=edit&id=${student.id}">Edit</a></td>
             <td><a href="/students?action=delete&id=${student.id}">Delete</a></td>
         </tr>
