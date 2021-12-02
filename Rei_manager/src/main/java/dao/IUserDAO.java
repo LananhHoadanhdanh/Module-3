@@ -10,7 +10,11 @@ public interface IUserDAO {
 
     User findById(int id);
 
-    List<User> findAll();
+    List<User> findAll() throws SQLException;
+
+    List<User> orderByName() throws SQLException;
+
+    List<User> orderByProperty(String conditionOrder) throws SQLException;
 
     List<User> findByName(String word);
 

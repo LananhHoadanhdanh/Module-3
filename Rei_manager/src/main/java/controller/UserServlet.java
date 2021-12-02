@@ -40,10 +40,28 @@ public class UserServlet extends HttpServlet {
             case "findByCountry":
                 showFindByCountryForm(request, response);
                 break;
+            case "orderByName":
+                try {
+                    showListUserOrderByName(request, response);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
-                showListUser(request, response);
+                try {
+                    showListUser(request, response);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
+    }
+
+    private void showListUserOrderByName(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        List<User> users = userDAO.orderByName();
+        request.setAttribute("listUserOrderByName", users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/listOrderByName.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void showFindByCountryForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,7 +103,7 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void showListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         List<User> users = userDAO.findAll();
         request.setAttribute("listUser", users);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");

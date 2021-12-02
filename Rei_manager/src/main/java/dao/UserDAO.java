@@ -16,6 +16,7 @@ public class UserDAO implements IUserDAO {
     private static final String SELECT_ALL_USERS = "select * from users";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
     private static final String UPDATE_USERS_SQL = "update users set name = ?, email = ?, country = ? where id = ?;";
+    private static final String ORDER_BY_NAME = "select * from users order by name;";
 
     public UserDAO() {
     }
@@ -29,6 +30,11 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    protected  PreparedStatement createPreparedStatement(String orderCommand) throws SQLException {
+       Connection connection = getConnection();
+       return connection.prepareStatement(orderCommand);
     }
 
 
@@ -68,12 +74,27 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll() throws SQLException {
+        return orderByProperty("default");
+    }
+
+    @Override
+    public List<User> orderByName() throws SQLException {
+        return orderByProperty("name");
+    }
+
+    @Override
+    public List<User> orderByProperty(String orderCondition) throws SQLException {
         List<User> users = new ArrayList<>();
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
-            System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
+        PreparedStatement preparedStatement = null;
+        if (orderCondition.equals("default")) {
+            preparedStatement = createPreparedStatement(SELECT_ALL_USERS);
+        }
+        if (orderCondition.equals("name")) {
+            preparedStatement = createPreparedStatement(ORDER_BY_NAME);
+        }
+        assert preparedStatement != null;
+        ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -81,9 +102,6 @@ public class UserDAO implements IUserDAO {
                 String country = rs.getString("country");
                 users.add(new User(id, name, email, country));
             }
-        } catch (SQLException e) {
-            printSQLException(e);
-        }
         return users;
     }
 
