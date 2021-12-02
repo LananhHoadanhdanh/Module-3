@@ -11,8 +11,10 @@ public class UserDAO implements IUserDAO {
     private String jdbcUsername = "root";
     private String jdbcPassword = "123456";
 
-    private static final String INSERT_USERS_SQL = "INSERT INTO users (name, email, country) VALUES (?, ?, ?);";
-    private static final String SELECT_USER_BY_ID = "select id, name, email, country from users where id = ?";
+    private static final String INSERT_USERS_SQL = "{CALL insert_user(?,?,?)}";
+//    private static final String INSERT_USERS_SQL = "INSERT INTO users (name, email, country) VALUES (?, ?, ?);";
+    private static final String SELECT_USER_BY_ID = "{CALL get_user_by_id(?)}";
+//    private static final String SELECT_USER_BY_ID = "select id, name, email, country from users where id = ?";
     private static final String SELECT_ALL_USERS = "select * from users";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
     private static final String UPDATE_USERS_SQL = "update users set name = ?, email = ?, country = ? where id = ?;";
@@ -38,29 +40,115 @@ public class UserDAO implements IUserDAO {
     }
 
 
+//    @Override
+//    public void add(User user) throws SQLException {
+//        System.out.println(INSERT_USERS_SQL);
+//        try (Connection connection = getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+//            preparedStatement.setString(1, user.getName());
+//            preparedStatement.setString(2, user.getEmail());
+//            preparedStatement.setString(3, user.getCountry());
+//            System.out.println(preparedStatement);
+//            preparedStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//    }
+
     @Override
     public void add(User user) throws SQLException {
         System.out.println(INSERT_USERS_SQL);
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getCountry());
-            System.out.println(preparedStatement);
-            preparedStatement.executeUpdate();
+             CallableStatement callableStatement = connection.prepareCall(INSERT_USERS_SQL)) {
+            callableStatement.setString(1, user.getName());
+            callableStatement.setString(2, user.getEmail());
+            callableStatement.setString(3, user.getCountry());
+            System.out.println(callableStatement);
+            callableStatement.executeUpdate();
         } catch (SQLException e) {
             printSQLException(e);
         }
     }
 
+//    @Override
+//    public void addUserTransaction(User user, int[] permission) {
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//        PreparedStatement pstmtAssignment = null;
+//        ResultSet rs = null;
+//        try {
+//            conn = getConnection();
+//            conn.setAutoCommit(false);
+//            pstmt = conn.prepareStatement(INSERT_USERS_SQL, Statement.RETURN_GENERATED_KEYS);
+//            pstmt.setString(1, user.getName());
+//            pstmt.setString(2, user.getEmail());
+//            pstmt.setString(3, user.getCountry());
+//            int rowAffected = pstmt.executeUpdate();
+//            rs = pstmt.getGeneratedKeys();
+//            int userId = 0;
+//            if (rs.next())
+//                userId = rs.getInt(1);
+//            if (rowAffected == 1) {
+//                String sqlPivot = "INSERT INTO user_permission(user_id,permission_id) "
+//                        + "VALUES(?,?)";
+//                pstmtAssignment = conn.prepareStatement(sqlPivot);
+//                for (int permissionId : permissions) {
+//                    pstmtAssignment.setInt(1, userId);
+//                    pstmtAssignment.setInt(2, permissionId);
+//                    pstmtAssignment.executeUpdate();
+//                }
+//                conn.commit();
+//            } else {
+//                conn.rollback();
+//            }
+//        } catch (SQLException ex) {
+//            try {
+//                if (conn != null)
+//                    conn.rollback();
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//            }
+//            System.out.println(ex.getMessage());
+//        } finally {
+//            try {
+//                if (rs != null) rs.close();
+//                if (pstmt != null) pstmt.close();
+//                if (pstmtAssignment != null) pstmtAssignment.close();
+//                if (conn != null) conn.close();
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+//    }
+
+//    @Override
+//    public User findById(int id) {
+//        User user = null;
+//        try (Connection connection = getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
+//            preparedStatement.setInt(1, id);
+//            System.out.println(preparedStatement);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            while (rs.next()) {
+//                String name = rs.getString("name");
+//                String email = rs.getString("email");
+//                String country = rs.getString("country");
+//                user = new User(id, name, email, country);
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//        return user;
+//    }
+
     @Override
     public User findById(int id) {
         User user = null;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
+             CallableStatement callableStatement = connection.prepareCall(SELECT_USER_BY_ID)) {
+            callableStatement.setInt(1, id);
+            System.out.println(callableStatement);
+            ResultSet rs = callableStatement.executeQuery();
             while (rs.next()) {
                 String name = rs.getString("name");
                 String email = rs.getString("email");
@@ -154,6 +242,12 @@ public class UserDAO implements IUserDAO {
         } catch (SQLException ignored) {
         }
     }
+
+    @Override
+    public void insertStore(User user) throws SQLException {
+
+    }
+
     public List<User> findByWord(String word, String condition) {
         List<User> users = new ArrayList<>();
         try (Connection connection = getConnection();

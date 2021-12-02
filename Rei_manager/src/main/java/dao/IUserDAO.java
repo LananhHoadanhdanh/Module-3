@@ -8,6 +8,8 @@ import java.util.List;
 public interface IUserDAO {
     void add(User user) throws SQLException;
 
+//    void addUserTransaction(User user, int[] permission);
+
     User findById(int id);
 
     List<User> findAll() throws SQLException;
@@ -23,4 +25,6 @@ public interface IUserDAO {
     void delete(int id) throws SQLException;
 
     void update(User user) throws SQLException;
+
+    void insertStore(User user) throws SQLException;
 }

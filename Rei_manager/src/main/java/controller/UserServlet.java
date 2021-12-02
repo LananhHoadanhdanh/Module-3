@@ -59,8 +59,8 @@ public class UserServlet extends HttpServlet {
 
     private void showListUserOrderByName(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         List<User> users = userDAO.orderByName();
-        request.setAttribute("listUserOrderByName", users);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user/listOrderByName.jsp");
+        request.setAttribute("listUser", users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -149,20 +149,18 @@ public class UserServlet extends HttpServlet {
     }
 
     private void findUserByCountry(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user/listByCountry.jsp");
         String country = request.getParameter("country");
         List<User> users = userDAO.findByCountry(country);
-        request.setAttribute("listByCountry", users);
-        request.setAttribute("countryFind", country);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
+        request.setAttribute("listUser", users);
         dispatcher.forward(request, response);
     }
 
     private void findUserByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user/listByName.jsp");
         String name = request.getParameter("name");
         List<User> users = userDAO.findByName(name);
-        request.setAttribute("listByName", users);
-        request.setAttribute("nameFind", name);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
+        request.setAttribute("listUser", users);
         dispatcher.forward(request, response);
     }
 
