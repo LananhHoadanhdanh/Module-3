@@ -19,5 +19,4 @@ public interface IProductDAO {
     boolean delete(int id) throws SQLException;
 
     boolean update(Product product) throws SQLException;
-    public void delete1(int id);
 }

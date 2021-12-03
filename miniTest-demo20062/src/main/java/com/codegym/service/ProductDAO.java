@@ -128,16 +128,6 @@ public class ProductDAO implements IProductDAO {
         }
         return rowDeleted;
     }
-    @Override
-    public void delete1(int id) {
-        try (
-                Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("delete from product where id = ?");) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-        }
-    }
 
     @Override
     public boolean update(Product product) throws SQLException {

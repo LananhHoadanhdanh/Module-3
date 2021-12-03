@@ -37,7 +37,6 @@
         <th>Quantity</th>
         <th>Edit</th>
         <th>Delete</th>
-<%--        <th>View</th>--%>
     </tr>
     <c:forEach var="product" items="${dsSP}">
         <tr>
@@ -46,10 +45,8 @@
             <td>${product.price}</td>
             <td>${product.quantity}</td>
             <td><a href="/products?act=edit&id=${product.id}">Edit</a></td>
-            <td><a href="/products?act=delete&id=${product.id}">Delete</a></td>
-            <td> <a onclick="return confirm('Are you sure?')"
-                    href="/products?act=delete1&id=${product.id}">delete1</a></td>
-
+            <td><a onclick="return confirm('Are you sure?')"
+                   href="/products?act=delete&id=${product.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

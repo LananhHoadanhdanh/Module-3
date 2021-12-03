@@ -36,21 +36,12 @@ public class ProductServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
-            case "delete1":
-                    delete1(request,response);
-                    break;
             case "edit":
                 showEditForm(request, response);
                 break;
             default:
                 showListProduct(request, response);
         }
-    }
-
-    private void delete1(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        productDAO.delete1(id);
-        response.sendRedirect("/products");
     }
 
     @Override
