@@ -18,7 +18,7 @@ public interface IUserDAO {
 
     List<User> orderByProperty(String conditionOrder) throws SQLException;
 
-    List<User> findByName(String word);
+    List<User> findByName(String nameFine);
 
     List<User> findByCountry(String countryFind);
 

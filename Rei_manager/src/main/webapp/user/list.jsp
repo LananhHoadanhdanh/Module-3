@@ -19,6 +19,10 @@
 <p><a href="/users?action=findByCountry">Find user by country</a></p>
 <p><a href="/users?action=orderByName">Order user by name</a></p>
 <p><a href="/users">Back to list</a></p>
+<p>
+<form method="get" action="/users">
+    <input type="text" name="nameFind"> <button>Find by name</button>
+</form></p>
 <table border="1" cellpadding="5">
     <caption><h2>List of Users</h2></caption>
     <tr>

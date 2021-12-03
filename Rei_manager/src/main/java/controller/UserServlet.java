@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "UserServlet", value = "/users")
@@ -104,9 +105,15 @@ public class UserServlet extends HttpServlet {
     }
 
     private void showListUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        List<User> users = userDAO.findAll();
-        request.setAttribute("listUser", users);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
+        List<User> users = new ArrayList<>();
+        String nameFile = request.getParameter("nameFile");
+        if (nameFile == null) {
+            users = userDAO.findAll();
+        } else {
+            users = userDAO.findByName(nameFile);
+        }
+        request.setAttribute("listUser", users);
         dispatcher.forward(request, response);
     }
 

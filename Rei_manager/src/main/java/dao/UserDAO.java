@@ -194,9 +194,10 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public List<User> findByName(String name) {
-        return findByWord(name,"name");
+    public List<User> findByName(String word) {
+        return findByWord(word, "name");
     }
+
 
     @Override
     public List<User> findByCountry(String country) {
