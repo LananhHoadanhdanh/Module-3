@@ -12,44 +12,46 @@
     <title>Title</title>
 </head>
 <body>
-<h2>Edit Blog?</h2>
-<form method="post">
-    <table style="text-align: left" cellpadding="5">
-        <tr>
-            <th>Name:</th>
-            <td><input type="text" name="name" value="${product.name}"></td>
-        </tr>
-        <tr>
-            <th>Price:</th>
-            <td><input type="number" name="price" value="${product.price}"></td>
-        </tr>
-        <tr>
-            <th>Quantity:</th>
-            <td><input type="number" name="quantity" value="${product.quantity}"></td>
-        </tr>
-        <tr>
-            <th>Color:</th>
-            <td><input type="text" name="color" value="${product.color}"></td>
-        </tr>
-        <tr>
-            <th>CategoryId:</th>
-            <td>
-                <select name="categoryId">
-                    <option value="">${product.categoryId}</option>
-                    <c:forEach var="category" items="${categories}">
-                        <option value="${category.id}">${category.id}. ${category.name}</option>
-                    </c:forEach>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th>Are you sure?</th>
-            <td>
-                <button>Send</button>
-            </td>
-        </tr>
-    </table>
-</form>
-<a href="/products"><h3>Back to product list</h3></a>
+<center>
+    <h2>Edit Blog?</h2>
+    <form method="post">
+        <table style="text-align: left" cellpadding="5">
+            <tr>
+                <th>Name:</th>
+                <td><input type="text" name="name" value="${product.name}"></td>
+            </tr>
+            <tr>
+                <th>Price:</th>
+                <td><input type="number" name="price" value="${product.price}"></td>
+            </tr>
+            <tr>
+                <th>Quantity:</th>
+                <td><input type="number" name="quantity" value="${product.quantity}"></td>
+            </tr>
+            <tr>
+                <th>Color:</th>
+                <td><input type="text" name="color" value="${product.color}"></td>
+            </tr>
+            <tr>
+                <th>CategoryId:</th>
+                <td>
+                    <select name="categoryId">
+                        <option value="">${product.categoryId}</option>
+                        <c:forEach var="category" items="${categories}">
+                            <option value="${category.id}">${category.id}. ${category.name}</option>
+                        </c:forEach>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Are you sure?</th>
+                <td>
+                    <button>Send</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <a href="/products"><h3>Back to product list</h3></a>
+</center>
 </body>
 </html>
