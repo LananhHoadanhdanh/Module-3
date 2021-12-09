@@ -64,7 +64,16 @@ public class ProductServlet extends HttpServlet {
 
     private void showList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("product/list.jsp");
-        List<Product> products = productService.findAll();
+        String key = request.getParameter("key");
+        List<Product> products = new ArrayList<>();
+        if (key == null) {
+            products = productService.findAll();
+        } else {
+            products = productService.findByName(key);
+            if (products.size() == 0) {
+                products = productService.findAll();
+            }
+        }
         request.setAttribute("products", products);
         List<Category> categories = findAllCategory(products);
         request.setAttribute("categories", categories);

@@ -92,4 +92,9 @@ public class BlogServiceImpl implements GeneralService<Blog> {
         }
         return blogs;
     }
+
+    @Override
+    public List<Blog> findByName() {
+        return null;
+    }
 }

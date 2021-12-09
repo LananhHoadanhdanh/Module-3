@@ -11,6 +11,8 @@
     <title>$Title$</title>
   </head>
   <body>
-  <h1><a href="/products">Products</a></h1>
+  <center>
+    <h1><a href="/products">Products</a></h1>
+  </center>
   </body>
 </html>

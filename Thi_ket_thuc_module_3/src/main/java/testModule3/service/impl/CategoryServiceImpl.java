@@ -67,4 +67,9 @@ public class CategoryServiceImpl implements GeneralService<Category> {
     public void edit(Category category) {
 
     }
+
+    @Override
+    public List<Category> findByName(String key) {
+        return null;
+    }
 }

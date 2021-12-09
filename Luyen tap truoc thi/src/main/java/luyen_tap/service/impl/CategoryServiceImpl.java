@@ -68,4 +68,9 @@ public class CategoryServiceImpl implements GeneralService<Category> {
         }
         return categories;
     }
+
+    @Override
+    public List<Category> findByName() {
+        return null;
+    }
 }

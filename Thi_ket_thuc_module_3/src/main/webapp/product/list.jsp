@@ -13,6 +13,10 @@
 </head>
 <body>
 <h3><a href="/products?action=create">Create a product</a></h3>
+<p>
+<form method="get" action="/products">
+    <input type="text" name="key"> <button>Find by name</button>
+</form></p>
 <table border="1" cellpadding="5">
     <caption><h2>List of products</h2></caption>
     <tr>

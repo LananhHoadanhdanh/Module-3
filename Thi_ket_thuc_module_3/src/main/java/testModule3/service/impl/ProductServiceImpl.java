@@ -99,4 +99,26 @@ public class ProductServiceImpl implements GeneralService<Product> {
         } catch (SQLException ignored) {
         }
     }
+
+    @Override
+    public List<Product> findByName(String key) {
+        List<Product> products = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("select * from product where name like ?");) {
+            System.out.println(preparedStatement);
+            preparedStatement.setString(1, "%" + key + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int price = rs.getInt("price");
+                int quantity = rs.getInt("price");
+                String color = rs.getString("color");
+                int categoryId = rs.getInt("categoryId");
+                products.add(new Product(id, name, price, quantity, color, categoryId));
+            }
+        } catch (SQLException ignored) {
+        }
+        return products;
+    }
 }

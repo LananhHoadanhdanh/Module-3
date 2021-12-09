@@ -8,4 +8,5 @@ public interface GeneralService <T>{
     void add(T t);
     void delete(int id);
     void edit(T t);
+    List<T> findByName(String key);
 }
