@@ -1,3 +1,4 @@
+drop view if exist hoa_don;
 create view hoa_don as
 select `order`.id, time, sum(product.price * orderdetail.quantity) as `TotalPrice`,customerId, customer.name as `Ten khach hang`
 from `order`, product, orderdetail, customer

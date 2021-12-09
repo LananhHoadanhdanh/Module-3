@@ -117,7 +117,8 @@ public class ProductDAO implements IProductDAO {
     @Override
     public boolean delete(int id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("delete from product where id = ?;");) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("delete from product where id = ?;");) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         }
